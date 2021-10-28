@@ -1,0 +1,265 @@
+<main role="main" class="container-fluid adore-sso-container">
+      <section class="row em-green-bar">
+        <div class="container-fluid em-page-grid">
+          <div class="col-6 m-auto">
+            <h6 class="adore-sso-sub-heading_upper-title em-page-title ml-4 mb-1">
+            </h6>
+          </div>
+          <div class="row">
+            <div class="col-6 m-auto adore-sso-sub-heading_lower-title">
+              <h2 class="text-white ml-4">
+              </h2>
+            </div>
+          </div>
+          <div
+                  class="row justify-content-center mt-1"
+                  *ngIf="dataAvailableForLinking"
+          >
+            <!-- Elements Start -->
+            <div class="col-4">
+              <div class="em-shadow-well p-4 bg-white">
+                <div class="row adore-golden-data-set-elements">
+                  <div class="col-12">
+                    <div
+                            class="em-font-weight-medium adore-font-size-20 adore-text-overflow"
+                    >
+                      {{ goldenDataSetName }}
+                    </div>
+                    <div class="input-group bg-white mt-2 mb-2">
+                      <input
+                              class="form-control py-2 border-right-0"
+                              type="text"
+                              (keyup)="keySearched"
+                              [(ngModel)]="dataElementSearchKey"
+                              id="data-element-search"
+                              placeholder="What are you looking for?"
+                      />
+                      <span class="input-group-append">
+                        <span class="input-group-text bg-transparent">
+                          <i class="em-icon em-icon-size-3 sy-tools-search"></i>
+                        </span>
+                      </span>
+                    </div>
+                    <ul class="p-0" *ngIf="filteredElementsList.length > 0">
+                      <li
+                              *ngFor="let element of filteredElementsList"
+                              key="element.id"
+                      >
+                        <div class="adore-content-divider"></div>
+                        <div
+                                id="elementId(element.id)"
+                                (click)="elementSelected(element.id)"
+                                class="element-connector p-1"
+                                ref="elementId(element.id)"
+                        >
+                          <p
+                                  class="mb-1"
+                                  *ngIf="element.title && element.title !== ''"
+                          >
+                            <span class="em-font-weight-medium pr-1">{{
+                              element.title
+                            }}</span>
+                            <span 
+                                    *ngIf="
+                                element.criticality && element.criticality !== ''
+                              "
+                            >ADORE_CRITICAL_DATA_SET_ELEMENT</span
+                            >
+                          </p>
+                          <p class="em-font-weight-medium mb-1" *ngIf="!element.criticality">NA</p>
+                          <p
+                                  class="mb-1"
+                                  *ngIf="
+                              element.description &&
+                                element.description !== '' &&
+                                element.description !== '0'
+                            "
+                          >
+                            {{ element.description }}
+                          </p>
+                          <p class="mb-1" *ngIf="!element.description">
+                            This is the test description of {{ element.title }}
+                          </p>
+                          <p class="mb-1">
+                            {{ connectedAttribute(element) }}
+                          </p>
+                        </div>
+                      </li>
+                    </ul>
+                    <div
+                            v-else
+                            class="text-center em-font-weight-medium adore-font-size-14 text-heavy-green"
+                    >
+                      NO_RESULT_FOUND
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Elements End -->
+            <!-- Connections Start -->
+            <div class="col-2 connections">
+              <svg
+                      id="connectionsContainer"
+                      class="adore-golden-data-set-connections-container"
+              >
+                <defs>
+                  <linearGradient
+                          id="fadeFromLeft"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="0%"
+                          gradientUnits="userSpaceOnUse"
+                  >
+                    <stop offset="0%" style="stop-color:#CCCCCC;stop-opacity:1" />
+                    <stop
+                            offset="40%"
+                            style="stop-color:#FFFFFF;stop-opacity:1"
+                    />
+                  </linearGradient>
+                  <linearGradient
+                          id="fadeFromRight"
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="0%"
+                          gradientUnits="userSpaceOnUse"
+                  >
+                    <stop
+                            offset="60%"
+                            style="stop-color:#FFFFFF;stop-opacity:1"
+                    />
+                    <stop
+                            offset="100%"
+                            style="stop-color:#CCCCCC;stop-opacity:1"
+                    />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <!-- Connections End -->
+            <!-- Attributes Start -->
+            <div class="col-4">
+              <div class="em-shadow-well p-4 bg-white">
+                <div class="row adore-data-source-attribute">
+                  <div class="col-12">
+  <!--                  <button-->
+  <!--                          class="em-icon em-icon-size-3 sy-tools-pencil bg-white float-right mt-1"-->
+  <!--                          @click="editSelectedFiles"-->
+  <!--                          ref="editSelectedFilesBtn"-->
+  <!--                  ></button>-->
+                    <span class="em-font-weight-medium adore-font-size-20"
+                    >RHS Values</span
+                    >
+                    <div class="input-group bg-white mt-2 mb-3">
+                      <input
+                              class="form-control py-2 border-right-0"
+                              type="text"
+                              (keyup)="keySearched"
+                              [(ngModel)]="dataAttributeSearchKey"
+                              id="data-attribute-search-key"
+                              ref="data-attribute-search-key"
+                              placeholder="What are you looking for?"
+                      />
+                      <span class="input-group-append">
+                        <span class="input-group-text bg-transparent">
+                          <i class="em-icon em-icon-size-3 sy-tools-search"></i>
+                        </span>
+                      </span>
+                    </div>
+                    <ul class="p-0" *ngIf="noFilterResult === false">
+                      <li *ngFor="let file of filteredAttributeList" key="file.id">
+                        <div id="file.id">
+                          <h6 class="mb-2" *ngIf="file.title && file.title !== ''">
+                            {{ file.title | uppercase }}
+                          </h6>
+                          <h6 class="mb-2" *ngIf="!file.title">NA</h6>
+                          <div class="adore-file-attributes">
+                            <ul class="p-0">
+                              <li *ngFor="let attr of file.attributes" key="attr.id">
+                                <div
+                                        class="custom-control custom-checkbox"
+                                        id="attributeId(attr.id) + '_container'"
+                                        ref="attributeId(attr.id) + '_container'"
+                                >
+                                  <input
+                                          class="custom-control-input adore-attribute-selector"
+                                          type="checkbox"
+                                          id="attributeId(attr.id)"
+                                          ref="attributeId(attr.id)"
+                                          (click)="attributeSelected(attr, file)"
+                                          disabled
+                                  />
+                                  <label
+                                          class="custom-control-label pl-2"
+                                          for="attributeId(attr.id)"
+                                  >
+                                    <p
+                                            class="em-font-weight-medium m-0"
+                                            *ngIf="
+                                        attr.attribute_name &&
+                                          attr.attribute_name !== ''
+                                      "
+                                    >
+                                      {{ attr.attribute_name }}
+                                    </p>
+                                    <p class="em-font-weight-medium m-0" *ngIf="!attr.attribute_name">
+                                      NA
+                                    </p>
+                                    <p
+                                            *ngIf="
+                                        attr.description &&
+                                          attr.description !== '' &&
+                                          attr.description !== '0'
+                                      "
+                                    >
+                                      {{ attr.description }}
+                                    </p>
+                                    <p *ngIf="!attr.description">
+                                      This is the test description of
+                                      {{ attr.attribute_name }}
+                                    </p>
+                                  </label>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <div
+                            v-else
+                            class="text-center em-font-weight-medium adore-font-size-14 text-heavy-green"
+                    >
+                      NO_RESULT_FOUND
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Attributes End -->
+          </div>
+          <div
+                  v-else
+                  class="text-center em-font-weight-medium adore-font-size-14 text-heavy-green mt-8"
+          >NO_RESULT_FOUND
+          </div>
+        </div>
+        <div
+                class="row col-12 position-sticky bg-light bottom-0 right-0 p-2"
+                *ngIf="dataAvailableForLinking"
+        >
+          <div class="col-11 ml--1 text-right p-0">
+            <span *ngIf="savedAgoText !== ''" class="adore-vertical-align-text">{{
+              savedAgoText
+            }}</span>
+            <span
+                    *ngIf="savedAgoText !== ''"
+                    class="ml-1 em-icon em-icon-size-4 sy-form-valid"
+            ></span>
+          </div>
+        </div>
+      </section>
+    </main>
+  
